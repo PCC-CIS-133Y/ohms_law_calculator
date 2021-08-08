@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
+
 class SimpleApp:
     # Construct the user interface. There are two inputs for Volts and Ohms, and two buttons.
     # One button clears the inputs and the other button calculates Amps and Watts based on
@@ -50,7 +51,8 @@ class SimpleApp:
     # Results are shown in a separate window.
     # The answer window just has a label at the top and a multiline blob of text under the label.
     # We use this window for both error messages and for the results of the calculation.
-    def open_answer_frame(self, parent, text):
+    @staticmethod
+    def open_answer_frame(parent, text):
         answer_top_frame = ttk.Frame(parent, padding=10)
         answer_top_frame.grid(column=0, row=0, sticky="nsew")
 
@@ -71,17 +73,17 @@ class SimpleApp:
             ohms = float(self.ohms_entry.get())
             amps = volts / ohms
             watts = volts * amps
-        except:
+        except (ValueError, ZeroDivisionError):
             top2 = tk.Toplevel(self.mainwindow)
             self.open_answer_frame(top2, "There was an error processing your inputs.\n"
                                          + "Please make sure that volts and ohms are both numbers\n"
-                                         + "and that ohms is greater than 0." )
+                                         + "and that ohms is greater than 0.")
             return
 
         # The calculation worked, so let's show the results to the user.
         result_text = (str(volts) + " volts running through " + str(ohms) + " Ohms would be:\n\n"
-                             + "{:.2f} Amps\n".format(amps)
-                             + "{:.2f} Watts".format(watts))
+                       + "{:.2f} Amps\n".format(amps)
+                       + "{:.2f} Watts".format(watts))
         top2 = tk.Toplevel(self.mainwindow)
         self.open_answer_frame(top2, result_text)
 
@@ -93,9 +95,9 @@ class SimpleApp:
     def run(self):
         self.mainwindow.mainloop()
 
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Ohm's Law Calculator")
     app = SimpleApp(root)
     app.run()
-
